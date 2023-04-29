@@ -9,45 +9,8 @@ import axios from 'axios'
 import { fetchUserAllPostFailure, fetchUserAllPostStart, fetchUserAllPostSuccess } from '@/redux/Posts'
 import {  getLoggedUser } from '@/redux/Auth'
 import Cookies from 'js-cookie'
+import { PRODUCTION_URL } from '../../../constants'
 
-const items = [
-   {
-      id: 1,
-      title: 'Addiction When Gambling Becomes A Problem',
-      date: '20 Dec',
-      image: '/post/hero.jpg',
-      likes: 20000,
-      comments: 40000,
-      description: 'nappropriate behavior Lorem ipsum dolor sit amet, consectetur.'
-   },
-   {
-      id: 2,
-      title: 'Addiction When Gambling Becomes A Problem',
-      date: '20 Dec',
-      image: '/post/hero.jpg',
-      likes: 20000,
-      comments: 40000,
-      description: 'nappropriate behavior Lorem ipsum dolor sit amet, consectetur.'
-   },
-   {
-      id: 3,
-      title: 'Addiction When Gambling Becomes A Problem',
-      date: '20 Dec',
-      image: '/post/hero.jpg',
-      likes: 20000,
-      comments: 40000,
-      description: 'nappropriate behavior Lorem ipsum dolor sit amet, consectetur.'
-   },
-   {
-      id: 4,
-      title: 'Addiction When Gambling Becomes A Problem',
-      date: '20 Dec',
-      image: '/post/hero.jpg',
-      likes: 20000,
-      comments: 40000,
-      description: 'nappropriate behavior Lorem ipsum dolor sit amet, consectetur.'
-   },
-]
 
 const Account = () => {
    const router = useRouter()
@@ -81,7 +44,13 @@ const Account = () => {
       const fetchUserPost = async () => {
          dispatch(fetchUserAllPostStart())
          try {
-            const res = await axios.get(`http://localhost:5000/api/posts/userPosts/${query_id}`);
+            const res = await axios.get(`${PRODUCTION_URL}/api/posts/userPosts/${query_id}`, {
+               headers: {
+                  'Content-Type': 'application/json',
+                  'cache-control': 'no-cache'
+               }
+
+            });
 
             // console.log('res:', res.data);
             if(res.data) {
@@ -105,7 +74,12 @@ const Account = () => {
    useEffect(() => {
       const fetchUser = async () => {
          try {
-            const res = await axios.get(`http://localhost:5000/api/user/getUser/${query_id}`);
+            const res = await axios.get(`${PRODUCTION_URL}/api/user/getUser/${query_id}`, {
+               headers: {
+                  'Content-Type': 'application/json',
+                  'cache-control': 'no-cache'
+               }
+            });
 
             if(res.data) {
                setFetchedUser(res.data.data);

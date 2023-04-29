@@ -112,7 +112,8 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
       const res = await axios.post(`http://localhost:5000/api/posts/like/${posts?.post?._id}`, {}, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': "Bearer " + Cookies.get('accessToken')
+          'Authorization': "Bearer " + Cookies.get('accessToken'),
+          'cache-control': 'no-cache'
         }
       })
       if(res.data.success) {
@@ -128,7 +129,9 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
       const res = await axios.post(`http://localhost:5000/api/posts/dislike/${posts?.post?._id}`, {}, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': "Bearer " + Cookies.get('accessToken')
+          'Authorization': "Bearer " + Cookies.get('accessToken'),
+          'cache-control': 'no-cache'
+
         }
       })
 

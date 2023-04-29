@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { PRODUCTION_URL } from '../../../constants'
 
 const Post = () => {
   const [title, setTitle ] = useState('')
@@ -59,7 +60,7 @@ const Post = () => {
     setDisable(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/posts/', {
+      const res = await axios.post(`${PRODUCTION_URL}/api/posts/`, {
         title,
         content,
         tags,
@@ -69,6 +70,7 @@ const Post = () => {
           headers: {
             'Content-Type': 'application/json',
             "Authorization": "Bearer " + Cookies.get("accessToken"),
+            'cache-control': 'no-cache'
             } 
         })
 

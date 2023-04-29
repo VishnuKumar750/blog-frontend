@@ -37,7 +37,8 @@ const Comments = ({ comments, handleCommData }) => {
          const res = await axios.post(`${PRODUCTION_URL}/api/posts/comment/${comments._id}`, { "text": comment }, {
             headers: {
                'Content-Type': 'application/json',
-               'Authorization': "Bearer " + Cookies.get('accessToken') 
+               'Authorization': "Bearer " + Cookies.get('accessToken'),
+               'cache-control': 'no-cache'
             }
          })
 
@@ -73,7 +74,8 @@ const Comments = ({ comments, handleCommData }) => {
          const res = await axios.delete(`${PRODUCTION_URL}/api/posts/comment/${comments._id}?_id=${id}`, {
             headers: {
                'Content-Type': 'application/json',
-               'Authorization': "Bearer " + Cookies.get('accessToken')
+               'Authorization': "Bearer " + Cookies.get('accessToken'),
+               'cache-control': 'no-cache'
             }})
 
             if(res.data.success) {

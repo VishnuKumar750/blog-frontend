@@ -35,6 +35,7 @@ export const fetchPosts = (page) => async (dispatch) => {
           headers: {
             'Content-Type': 'application/json',
             "Authorization": "Bearer " + Cookies.get("accessToken"),
+            'cache-control': 'no-cache'
             }  
           });
         console.log(res.data);

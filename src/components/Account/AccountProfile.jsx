@@ -6,6 +6,7 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { PRODUCTION_URL } from '../../../constants';
 
 const AccountProfile = ({ handleClick, user }) => {
   const [ name, setName ] = useState(user?.name || '');
@@ -37,7 +38,7 @@ const AccountProfile = ({ handleClick, user }) => {
 
     try {
       if(updateData.avatar || updateData.name || updateData.bio) {
-      const res = await axios.put(`http://localhost:5000/api/user/updateUser/${user._id}`, updateData, {
+      const res = await axios.put(`${PRODUCTION_URL}/api/user/updateUser/${user._id}`, updateData, {
         headers: {
           'Content-Type': 'application/json',
           "Authorization": "Bearer " + Cookies.get("accessToken"),

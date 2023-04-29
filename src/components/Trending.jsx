@@ -85,7 +85,12 @@ const Trending = () => {
     const fetchTrending = async () => {
       dispatch(fetchTrendingStart())
       try {
-        const res = await axios.get(`${PRODUCTION_URL}/api/posts/trending`)
+        const res = await axios.get(`${PRODUCTION_URL}/api/posts/trending`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'cache-control': 'no-cache'
+          }
+        })
         console.log(res.data);
         dispatch(fetchTrendingSuccess(res.data.data))
       } catch (error) {

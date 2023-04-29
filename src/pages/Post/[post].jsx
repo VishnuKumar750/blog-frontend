@@ -38,7 +38,12 @@ const Post = () => {
       const fetchSinglePost = async () => {
         dispatch(fetchUserPostStart())
         try {
-          const res = await axios.get(`http://localhost:5000/api/posts/getPost/${router.query.post}`)
+          const res = await axios.get(`http://localhost:5000/api/posts/getPost/${router.query.post}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'cache-control': 'no-cache'
+            }
+          })
 
           if(res.data) {
             dispatch(fetchUserPostSuccess(res.data.data))

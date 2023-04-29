@@ -91,9 +91,12 @@ export const getLoggedUser = () => async (dispatch) => {
 
 
       if(user) {
-         const res = await axios.get(`${PRODUCTION_URL}/api/user/getUser/${user._id}`)
-
-         console.log(res.data);
+         const res = await axios.get(`${PRODUCTION_URL}/api/user/getUser/${user._id}`, {
+            headers: {
+               'cache-control': 'no-cache'
+            }
+         })
+         // console.log(res.data);
          if(res.data) {
             console.log('initalize_user');
             dispatch(INITIALIZE_USER(res.data.data));

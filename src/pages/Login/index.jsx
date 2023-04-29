@@ -21,7 +21,8 @@ const UserAuth = () => {
       // console.log(PRODUCTION_URL);
       const res = await axios.post(`${PRODUCTION_URL  || "http://localhost:5000"}/api/auth/login`, { email, password }, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'cache-control': 'no-cache'
         },
       })
       // console.log(res.data);
@@ -38,7 +39,7 @@ const UserAuth = () => {
         // console.log('sldjf');
       }
     } catch (error) {
-      // console.log(error.message);
+      console.log(error.message);
       toast.error('login failed');
     }
     }
@@ -49,6 +50,11 @@ const UserAuth = () => {
     try {
       const res = await axios.post('http://localhost:5000/api/auth/register', {
         name, email, password, avatar
+      }, {
+        headers: {
+          'Content-Type': 'application/json', 
+          'cache-control': 'no-cache'
+        }
       });
 
       console.log(res.data);
