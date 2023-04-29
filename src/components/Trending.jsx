@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchTrending, fetchTrendingFailure, fetchTrendingStart, fetchTrendingSuccess } from '@/redux/Posts'
 import Head from 'next/head'
 import axios from 'axios'
+import { PRODUCTION_URL } from '../../constants'
 
 const items = [
   {
@@ -81,7 +82,17 @@ const Trending = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchTrending())
+    const fetchTrending = async () => {
+      dispatch(fetchTrendingStart())
+      try {
+        const res = await axios.get(`${PRODUCTION_URL}/api/posts/trending`)
+        console.log(res.data);
+        dispatch(fetchTrendingSuccess(res.data.data))
+      } catch (error) {
+        dispatch(fetchTrendingFailure(error.message))
+      }
+    }
+    fetchTrending()
   },[dispatch])
 
   const handlePrev = () => {

@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 import { AiFillDelete } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { PRODUCTION_URL } from '../../../constants'
 
 const Comments = ({ comments, handleCommData }) => {
    const [comment, setComment] = React.useState('')
@@ -33,7 +34,7 @@ const Comments = ({ comments, handleCommData }) => {
       try {
          setLoading(true);
 
-         const res = await axios.post(`http://localhost:5000/api/posts/comment/${comments._id}`, { "text": comment }, {
+         const res = await axios.post(`${PRODUCTION_URL}/api/posts/comment/${comments._id}`, { "text": comment }, {
             headers: {
                'Content-Type': 'application/json',
                'Authorization': "Bearer " + Cookies.get('accessToken') 
@@ -69,7 +70,7 @@ const Comments = ({ comments, handleCommData }) => {
 
    const handleDelete = async (id) => {
      try {
-         const res = await axios.delete(`http://localhost:5000/api/posts/comment/${comments._id}?_id=${id}`, {
+         const res = await axios.delete(`${PRODUCTION_URL}/api/posts/comment/${comments._id}?_id=${id}`, {
             headers: {
                'Content-Type': 'application/json',
                'Authorization': "Bearer " + Cookies.get('accessToken')
@@ -116,7 +117,7 @@ const Comments = ({ comments, handleCommData }) => {
          <div className='mx-6 my-4 py-4 flex-1'>
             <div className='flex items-center justify-between'>
             <h1 className='text-xl font-bold font-serif '>{item?.commentor?.name}</h1>
-            {user._id === item?.commentor?._id &&
+            {user?._id === item?.commentor?._id &&
             <AiFillDelete className='text-red-500 text-xl' onClick={() => handleClick(index)}/>
             }
             </div>

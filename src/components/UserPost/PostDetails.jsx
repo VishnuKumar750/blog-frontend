@@ -8,6 +8,7 @@ import { AiFillDelete } from 'react-icons/ai'
 import { FaCamera, FaEdit, FaFacebook, FaHeart, FaInstagram, FaPinterest, FaRegHeart, FaTwitter } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { PRODUCTION_URL } from '../../../constants'
 
 const PostDetails = ({ posts, handleUpdateEffect }) => {
   const { user } = useSelector(state => state.auth)
@@ -41,7 +42,7 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
   
   const handleDelete = async () => {
     try {
-      const res = await axios.delete(`http://localhost:5000/api/posts/delete/${posts?.post?._id}`, {
+      const res = await axios.delete(`${PRODUCTION_URL}/api/posts/delete/${posts?.post?._id}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': "Bearer " + Cookies.get('accessToken')
@@ -73,12 +74,12 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
 
     const form = {};
 
-    if(title) form.title = title;
-    if(content) form.content = content;
+    if(postTitle) form.title = postTitle;
+    if(postContent) form.content = postContent;
     if(image) form.image = image;
 
     try {
-      const res = await axios.put(`http://localhost:5000/api/posts/updatePost/${posts?.post?._id}`, form, {
+      const res = await axios.put(`${PRODUCTION_URL}/api/posts/updatePost/${posts?.post?._id}`, form, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': "Bearer " + Cookies.get('accessToken')
@@ -170,7 +171,7 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
           <div className='w-[3em] h-[3em]'>
           <Link href={`/Account/${posts?.author?._id}`}>
             <Image
-              src={posts?.author?.image || "/post/hero.jpg"}
+              src={posts?.author?.avatar || "/post/hero.jpg"}
               alt="userPost"
               width={400}
               height={400}

@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { PRODUCTION_URL } from '../../../constants';
 
 const UserAuth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,10 +15,15 @@ const UserAuth = () => {
   const dispatch = useDispatch()
 
   const SignIn = async ({ email, password }) => {
-    dispatch(loginStart());
+    // dispatch(loginStart());
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password })
+      // console.log(PRODUCTION_URL);
+      const res = await axios.post(`${PRODUCTION_URL  || "http://localhost:5000"}/api/auth/login`, { email, password }, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
       // console.log(res.data);
 
       if(res.data) {
@@ -27,11 +33,13 @@ const UserAuth = () => {
         toast.success('Login Successfull')
         setIsAuth(!isAuth);
       } else {
-        dispatch(loginFailure(error));
+        dispatch(loginFailure(res.data.message));
         toast.error('Login Failed');
+        // console.log('sldjf');
       }
     } catch (error) {
-      toast.error('Login Failed');
+      // console.log(error.message);
+      toast.error('login failed');
     }
     }
 
