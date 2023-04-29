@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineArrowRight } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
+import { PRODUCTION_URL } from '../../../constants'
 
 
 const Post = () => {
@@ -38,7 +39,7 @@ const Post = () => {
       const fetchSinglePost = async () => {
         dispatch(fetchUserPostStart())
         try {
-          const res = await axios.get(`http://localhost:5000/api/posts/getPost/${router.query.post}`, {
+          const res = await axios.get(`${PRODUCTION_URL}/api/posts/getPost/${router.query.post}`, {
             headers: {
               'Content-Type': 'application/json',
               'cache-control': 'no-cache'

@@ -109,7 +109,7 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
   const handleLiked = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`http://localhost:5000/api/posts/like/${posts?.post?._id}`, {}, {
+      const res = await axios.post(`${PRODUCTION_URL}/api/posts/like/${posts?.post?._id}`, {}, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': "Bearer " + Cookies.get('accessToken'),
@@ -126,7 +126,7 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
 
   const handleDisliked = async (e) => {
     try {
-      const res = await axios.post(`http://localhost:5000/api/posts/dislike/${posts?.post?._id}`, {}, {
+      const res = await axios.post(`${PRODUCTION_URL}/api/posts/dislike/${posts?.post?._id}`, {}, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': "Bearer " + Cookies.get('accessToken'),
