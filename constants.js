@@ -1,0 +1,1 @@
+export const PRODUCTION_URL = "https://blog-backend-hcg2.onrender.com"
