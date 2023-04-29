@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { PRODUCTION_URL } from "../../constants";
 
 
 const initialState = {
@@ -30,7 +31,7 @@ const postSlice = createSlice({
 export const fetchPosts = (page) => async (dispatch) => {
       dispatch(fetchPostsStart());
       try {
-        const res = await axios.get(`http://localhost:5000/api/posts?page=${page}`, {
+        const res = await axios.get(`${PRODUCTION_URL}/api/posts?page=${page}`, {
           headers: {
             'Content-Type': 'application/json',
             "Authorization": "Bearer " + Cookies.get("accessToken"),
