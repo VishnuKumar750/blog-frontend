@@ -3,26 +3,25 @@ import AccountProfile from '@/components/Account/AccountProfile'
 import Navbar from '@/components/Navbar'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import { fetchUserAllPostFailure, fetchUserAllPostStart, fetchUserAllPostSuccess } from '@/redux/Posts'
 import {  getLoggedUser } from '@/redux/Auth'
 import Cookies from 'js-cookie'
 import { PRODUCTION_URL } from '../../../constants'
 
 
-const Account = () => {
+const Account = ({ userProfile, userposts }) => {
    const router = useRouter()
 
    const { user } = useSelector((state) => state.auth);
-   const { loading, posts } = useSelector((state) => state.UAP);
    
    const dispatch = useDispatch();
 
    const query_id = router.query.Account;
 
-   const [ fetchedUser, setFetchedUser ] = useState({});
+   const [ fetchedUser, setFetchedUser ] = useState(userProfile);
+   const [posts, setPosts] = useState(userposts)
 
    const handleRoute = (id) => {
       router.push(`/Post/[post]` ,`/Post/${id}`)
@@ -39,79 +38,72 @@ const Account = () => {
    });
 
    const follow = user?.following?.map((item) => item?._id).includes(query_id);
-   
-   useEffect(() => {
-      const fetchUserPost = async () => {
-         dispatch(fetchUserAllPostStart())
-         try {
-            const res = await axios.get(`${PRODUCTION_URL}/api/posts/userPosts/${query_id}`, {
-               headers: {
-                  'Content-Type': 'application/json',
-                  'cache-control': 'no-cache'
-               }
 
-            });
-
-            // console.log('res:', res.data);
-            if(res.data) {
-               dispatch(fetchUserAllPostSuccess(res.data.data))
-            } else {
-               dispatch(fetchUserAllPostFailure(res.data.message))
+   const profileupdate = async () => {
+      try {
+         const res = await axios.get(`${PRODUCTION_URL}/api/user/getUser/${query_id}`, {
+            headers: {
+               'Content-Type': 'application/json',
+               'cache-control': 'no-cache'
             }
-         } catch (error) {
-            console.log('error:', error.message)
-         }
-      }
-      fetchUserPost();
-   }, [dispatch, query_id])
+         });
 
+         if(res.data) {
+            setFetchedUser(res.data.data);
+            dispatch(getLoggedUser())
+         } else {
+            console.log('error');
+            console.log('err:', res.data.message);
+         }
+      }catch(err) {
+         console.log('error');
+         console.log('err:', err.message);
+      }   
+   }
 
    const handleProfile = () => {
+      profileupdate()
       setOpenProfile(!openProfile)
    }
 
-
-   useEffect(() => {
-      const fetchUser = async () => {
-         try {
-            const res = await axios.get(`${PRODUCTION_URL}/api/user/getUser/${query_id}`, {
-               headers: {
-                  'Content-Type': 'application/json',
-                  'cache-control': 'no-cache'
-               }
-            });
-
-            if(res.data) {
-               setFetchedUser(res.data.data);
-               dispatch(getLoggedUser())
-            } else {
-               console.log('err:', res.data.message);
-            }
-         }catch(err) {
-            console.log('err:', err.message);
-         }   
-      }
-      fetchUser(); 
-   }, [openProfile, query_id, dispatch])
-
    const handleFollow = async () => {
       try {
-         const res = await axios.post(`http://localhost:5000/api/user/follow/${query_id}`, {},{
+         const res = await axios.post(`${PRODUCTION_URL}/api/user/follow/${query_id}`, {},{
             headers: {
               'Content-Type': 'application/json',
               "Authorization": "Bearer " + Cookies.get("accessToken"),
+               'cache-control': 'no-cache'
               } 
           })
-         console.log('res:', res.data);
+         // console.log('res:', res.data);
 
          if(res.data) {
-            dispatch(getLoggedUser())
+            profileupdate()
          }
          
       } catch (error) {
          console.log('error:', error.message);
       }
    }
+
+   const handleUnFollow = async () => {
+      try {
+         const res = await axios.post(`${PRODUCTION_URL}/api/user/unfollow/${query_id}`, {},{
+            headers: {
+               'Content-Type': 'application/json',
+               'Authorization': 'Bearer ' + Cookies.get('accessToken'),
+               'cache-control': 'no-cache'
+            }
+         })
+
+         if(res.data.success) {
+            profileupdate()
+         }
+      } catch (error) {
+         console.log('error:', error.message);
+      }
+   }
+
 
 
   return (
@@ -157,7 +149,7 @@ const Account = () => {
                <button className='bg-gray-200 text-gray-400 px-4 py-2 rounded-full my-4' onClick={handleProfile}>Edit Profile</button>
                }
                
-               {user?._id !== query_id && <button className={`${follow ? "bg-gray-800 bg-opacity-60" : "bg-sky-500"} text-white px-4 py-2 mx-2 rounded-full my-4`} onClick={handleFollow}>{follow ? "unfollow" :  "follow"}</button>}
+               {user?._id !== query_id && <button className={`${follow ? "bg-gray-800 bg-opacity-60" : "bg-sky-500"} text-white px-4 py-2 mx-2 rounded-full my-4`} onClick={follow ? handleUnFollow : handleFollow }>{follow ? "unfollow" :  "follow"}</button>}
             </div>
          </div>
       </div>
@@ -165,15 +157,15 @@ const Account = () => {
       <div className='px-6 lg:px-12 my-8 '>
       <h1 className='text-2xl font-bold '>Posts</h1>
       <div className='grid my-8 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-         {loading ? 
-            <div>Loading...</div>
-         :
-         posts?.map((item, i) => ( 
-         <Card key={i} onClick={() => handleRoute(item?._id)} item={item} />
-         ))} 
+         {
+            posts?.map((item, i) => ( 
+            <Card key={i} onClick={() => handleRoute(item?._id)} item={item} />
+            )) 
+         }
       </div>
       </div>
    </div>
+
    {openProfile && 
       <div className='w-full h-screen bg-gray-800 bg-opacity-50 z-[999] fixed top-0 grid place-content-center' onClick={handleProfile}>
          <AccountProfile handleClick={handleProfile} user={fetchedUser} />
@@ -183,5 +175,37 @@ const Account = () => {
    
   )
 }
+
+export async function getServerSideProps(context) {
+   const { query } = context;
+   const { Account } = query;
+
+
+   const [res1, res2] = await Promise.all([
+      axios.get(`${PRODUCTION_URL}/api/user/getUser/${Account}`, {
+         headers: {
+            'Content-Type': 'application/json',
+            'cache-control': 'no-cache'
+         }
+      }),
+      axios.get(`${PRODUCTION_URL}/api/posts/userPosts/${Account}`, {
+         headers: {
+            'Content-Type': 'application/json',
+            'cache-control': 'no-cache'
+         }
+      })
+   ])
+
+   // console.log('res1:', res1.data.data);
+   // console.log('res2:', res2);
+
+   return {
+       props: {
+         userProfile: res1.data.data,
+         userposts: res2.data.data
+         }
+   }
+}
+
 
 export default Account

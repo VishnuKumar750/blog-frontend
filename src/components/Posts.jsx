@@ -8,6 +8,7 @@ import { fetchPosts, fetchPostsFailure, fetchPostsStart, fetchPostsSuccess } fro
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import Link from 'next/link'
+import { PRODUCTION_URL } from '../../constants'
 
 
 const items = [

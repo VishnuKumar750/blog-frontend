@@ -87,9 +87,6 @@ export const getLoggedUser = () => async (dispatch) => {
       const user = JSON.parse(localStorage.getItem("user")) ? JSON.parse(localStorage.getItem("user")) : null;
 
 
-      console.log(user);
-
-
       if(user) {
          const res = await axios.get(`${PRODUCTION_URL}/api/user/getUser/${user._id}`, {
             headers: {

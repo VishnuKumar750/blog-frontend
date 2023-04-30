@@ -62,7 +62,8 @@ const items = [
 const Trending = () => {
   const [cardsToShow, setCardsToShow] = useState(1);
   const sliderRef = useRef()
-  const { loading,  posts } = useSelector(state => state.trending)
+
+  const { posts, loading,  } = useSelector(state => state.trending)
 
   const dispatch = useDispatch()
 
@@ -71,7 +72,9 @@ const Trending = () => {
       if (window.innerWidth > 1200) {
         setCardsToShow(4);
       } else if (window.innerWidth > 768) {
+        
         setCardsToShow(3);
+
       } else {
         setCardsToShow(1);
       }
@@ -136,14 +139,11 @@ const Trending = () => {
       <div className='flex flex-col items-center justify-center md:flex-row px-2 md:px-8'>
         <div className='w-full h-full'>
         <Slider {...settings} ref={sliderRef}>
-        { loading ? (
-          [...Array(10)]?.map((item, i) => (
-            <LoadingSkeleton  key={i}/>
-          ))
-        ) : (
+        {
           posts?.map((item, i) => (
             <Card key={i} item={item} onClick={handlePost}/>
-          )))}
+          ))
+        }
           </Slider>
         </div>
 
@@ -159,5 +159,7 @@ const Trending = () => {
     </div>
   )
 }
+
+
 
 export default Trending
