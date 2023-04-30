@@ -38,7 +38,7 @@ export const fetchPosts = (page) => async (dispatch) => {
             'cache-control': 'no-cache'
             }  
           });
-        console.log(res.data);
+      //   console.log(res.data);
         if(res.data) {
           dispatch(fetchPostsSuccess(res.data));
         } else {

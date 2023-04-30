@@ -7,7 +7,7 @@ const Category = () => {
   const router = useRouter();
    
   const handleCategory = (categoryName) => {
-    router.push(`/categories/${categoryName.toLowerCase()}`);
+    router.push(`/categories/${categoryName}`);
   }
    
   return (

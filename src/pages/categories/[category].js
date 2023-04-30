@@ -2,11 +2,13 @@ import Card from '@/components/CategoryCard/Card';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PostCategory from '@/components/UserPost/PostCategory';
+import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineArrowRight } from 'react-icons/ai';
+import { PRODUCTION_URL } from '../../../constants';
 
 
 const items = [
@@ -82,10 +84,11 @@ const items = [
   },
 ]
 
-const Category = () => {
+const Category = ( { posts } ) => {
    const router = useRouter();
    const { category } = router.query;
 
+   console.log(posts);
   
    const handleRoute = (id) => {
       router.push('/Post/[post]', `/Post/${id}`)
@@ -101,6 +104,7 @@ const Category = () => {
         setNumItemsToShow(numItemsToShow + 5);
       }, 3000);
     };
+
 
   return (
     <>
@@ -127,21 +131,11 @@ const Category = () => {
       <div className='grid grid-cols-1 lg:grid-cols-5 lg:px-8'>
       <div className='lg:col-span-3'>
       <div className='my-8'>
-      {items.slice(0, numItemsToShow).map((item, i) => (
+      {posts.map((item, i) => (
           <Card key={i} item={item} onClick={handleRoute}/>
         ))}
       </div>
       
-
-
-      {(numItemsToShow < items.length && 
-      <div className='flex items-center justify-center'>
-            <button onClick={handleLoadMore} className="bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-600">
-              Load More
-            </button>
-      </div>
-      )}  
-
       </div>
       {/* details */}
       <div className='lg:col-span-2'>
@@ -155,5 +149,23 @@ const Category = () => {
     </>
   )
 }
+
+export async function getServerSideProps(context) {
+  const { category } = context.query;
+
+  let posts = '';
+  try {
+    posts = await axios.get(`${PRODUCTION_URL}/api/posts/category/${category}`)
+  } catch(err) {
+
+  }
+
+  return {
+    props: {
+      posts: posts.data.data,
+    },
+  };
+}
+
 
 export default Category
