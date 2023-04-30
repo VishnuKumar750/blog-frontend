@@ -58,6 +58,7 @@ const Post = () => {
     }
 
     setDisable(true);
+    console.log(tags);
 
     try {
       const res = await axios.post(`${PRODUCTION_URL}/api/posts/`, {
@@ -79,6 +80,7 @@ const Post = () => {
         setTimeout(() => {
           router.replace('/');
         }, 2000);
+
       } else {
         toast.error('Post Creation Failed')
       }
@@ -148,9 +150,9 @@ const Post = () => {
 
       </div>
       <div className="mb-4">
-        <select className='py-2 px-2 outline-none border-2' value={tags} onFocus={handleFocusTags} onChange={(e) => setTags(e.target.value)}>
+        <select className='py-2 px-2 outline-none border-2' value={tags} onFocus={handleFocusTags} onChange={(e) => setTags(e.target.value)} >
          {categories?.map((category, i) => (
-            <option key={i} value={category.name} >{category.name}</option>
+            <option key={i} value={category.name}>{category.name}</option>
          ))}
         </select>
         {errors.tags && <p className='text-red-500 text-sm'>{errors.tags}</p>}
