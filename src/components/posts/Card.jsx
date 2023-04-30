@@ -8,10 +8,9 @@ const date = new Date(item?.createdAt);
 const formattedDate = `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
 
   return (
-    <div className='flex w-full px-4 cursor-pointer'
-    
+    <div className='flex w-full px-4 cursor-pointer gap-2 my-4'
     >
-      <div className='relative w-[20em] h-[11em] mx-2 group'>
+      <div className='relative w-[20em] h-[11em] mx-2 group flex-1'>
          <div className='absolute z-[9] w-16 px-4 py-6 font-bold bg-black bg-opacity-80 top-0 left-0 text-white'>{formattedDate}</div>
          <Image 
             src={item?.image || "/post/hero.jpg"}
@@ -21,8 +20,8 @@ const formattedDate = `${date.getDate()} ${date.toLocaleString('default', { mont
             className='w-full h-full group-hover:scale-105 transition-all'
          />
       </div>
-      <div className='mx-2'>
-         <h1 className='text-lg font-bold my-2'>{item?.title}</h1>
+      <div className='mx-2 flex-1'>
+         <h1 className='text-xl font-bold my-2 max-w-[12em] truncate'>{item?.title}</h1>
          <p className='text-sm font-medium text-gray-400 my-4 max-w-xs h-14 overflow-hidden '>{item?.content}</p>
 
          <div className='flex items-center justify-between mx-1 md:mx-0 w-full'>
