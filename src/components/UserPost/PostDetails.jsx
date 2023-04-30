@@ -147,13 +147,13 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
   return (
     <div className=''>
     <div className='my-8 lg:px-8 mx-4 bg-white px-4 py-4 shadow-md'>
-      <div className='w-full h-[20em]'>
+      <div className='w-full h-[20em] bg-slate-200'>
          <Image 
           src={posts?.post?.image || "/post/hero.jpg"}
           alt="userPost"
             width={400}
             height={400}
-            className='w-full h-full'
+            className='w-full h-full object-contain'
          />
       </div>
 

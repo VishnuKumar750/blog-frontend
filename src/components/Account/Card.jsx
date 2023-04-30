@@ -2,12 +2,16 @@ import Image from 'next/image'
 import React from 'react'
 
 const Card = ({item, onClick}) => {
+  const date = new Date(item?.createdAt);
+  const formattedDate = `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
+
+
   return (
     <div className='grid grid-cols-5 cursor-pointer bg-white shadow-md py-2 my-2 w-full hover:scale-105 transition-all'
     onClick={onClick}
     >
       <div className='col-span-2 sm:col-span-1  md:col-span-2 h-[10em] relative'>
-         <div className='absolute top-0 text-white bg-gray-900 z-[99] bg-opacity-80 px-2 py-2'>20 <br/> Dec</div>
+         <div className='absolute top-0 text-white bg-gray-900 z-[99] bg-opacity-80 px-4 py-4'>{formattedDate}</div>
          <Image 
             src={item?.image || "/user/user.jpg"}
             alt="posts"
