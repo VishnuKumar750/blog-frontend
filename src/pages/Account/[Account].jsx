@@ -3,7 +3,7 @@ import AccountProfile from '@/components/Account/AccountProfile'
 import Navbar from '@/components/Navbar'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import {  getLoggedUser } from '@/redux/Auth'
@@ -39,6 +39,7 @@ const Account = ({ userProfile, userposts }) => {
 
    const follow = user?.following?.map((item) => item?._id).includes(query_id);
 
+
    const profileupdate = async () => {
       try {
          const res = await axios.get(`${PRODUCTION_URL}/api/user/getUser/${query_id}`, {
@@ -60,6 +61,11 @@ const Account = ({ userProfile, userposts }) => {
          console.log('err:', err.message);
       }   
    }
+
+   useEffect(() => {
+      profileupdate()
+   }, [query_id])
+
 
    const handleProfile = () => {
       profileupdate()
