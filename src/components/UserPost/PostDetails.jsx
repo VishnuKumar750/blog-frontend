@@ -152,7 +152,7 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
   return (
     <div className=''>
     <div className='my-8 lg:px-8 mx-4 bg-white px-4 py-4 shadow-md'>
-      <div className='w-full h-[20em] bg-slate-200'>
+      <div className='w-full h-[20em] 4xl:h-[32em] bg-slate-200'>
          <Image 
           src={posts?.post?.image || "/post/hero.jpg"}
           alt="userPost"
@@ -163,7 +163,7 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
       </div>
 
       <div>
-        <h1 className='text-2xl font-bold my-4'>{posts?.post?.title}</h1>
+        <h1 className='text-2xl font-bold my-4 4xl:text-4xl'>{posts?.post?.title}</h1>
         { user?._id === posts?.author?._id && <div className='flex items-center justify-end my-4'>
           <FaEdit className='text-xl mx-4 text-gray-500 cursor-pointer'
           onClick={() => setShowUpdatePost(!showPost)}
@@ -193,7 +193,7 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
 
     {/* content */}
       <div className='my-4'>
-        <p className='text-lg text-gray-700'>
+        <p className='text-lg text-gray-700 4xl:text-4xl'>
           {posts?.post?.content}
         </p>
         <p className='border-l-2 px-4 my-4 border-gray-800 bg-gray-200 py-2'>

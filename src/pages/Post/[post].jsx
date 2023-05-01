@@ -65,7 +65,7 @@ const Post = () => {
       <meta name="description" content="Posts" />
     </Head>
     <Navbar />
-      <div className='w-full h-[50vh] bg-sky-400 flex flex-col items-start  justify-center lg:px-8'>
+      <div className='w-full h-[50vh] 4xl:h-[20vh] bg-sky-400 flex flex-col items-start  justify-center lg:px-8'>
         <h1 className='text-[2.5rem] text-white font-bold mx-4'>Post Details</h1>
         <ul className='mx-4 flex items-center justify-around my-4 text-[1.2rem] text-white'>
           <li className='cursor-pointer'>Home</li>

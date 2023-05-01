@@ -5,7 +5,7 @@ import { FaArrowRight } from 'react-icons/fa'
 const Footer = () => {
   return (
     <div className='bg-black mt-10 h-full w-full px-4 lg:px-8 border-2'>
-      <div className='grid grid-cols-1 gap-4 lg:grid-cols-3'>
+      <div className='grid grid-cols-1 gap-4 lg:grid-cols-3 lg:px-8'>
          <div className='py-10 col-span-1 mx-8 lg:mx-0'>
             <h1 className='text-white text-xl my-2 font-bold'>Top Products</h1>
             <ul>
