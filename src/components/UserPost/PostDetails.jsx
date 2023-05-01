@@ -108,6 +108,11 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
 
   const handleLiked = async (e) => {
     e.preventDefault();
+
+    if(!user) {
+      toast.error('Please Login to like this post');
+      return;
+    }
     try {
       const res = await axios.post(`${PRODUCTION_URL}/api/posts/like/${posts?.post?._id}`, {}, {
         headers: {

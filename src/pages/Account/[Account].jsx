@@ -53,11 +53,9 @@ const Account = ({ userProfile, userposts }) => {
             setFetchedUser(res.data.data);
             dispatch(getLoggedUser())
          } else {
-            console.log('error');
             console.log('err:', res.data.message);
          }
       }catch(err) {
-         console.log('error');
          console.log('err:', err.message);
       }   
    }

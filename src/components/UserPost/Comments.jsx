@@ -6,6 +6,7 @@ import { AiFillDelete } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { PRODUCTION_URL } from '../../../constants'
+import { useRouter } from 'next/router'
 
 const Comments = ({ comments, handleCommData }) => {
    const [comment, setComment] = React.useState('')
@@ -92,7 +93,11 @@ const Comments = ({ comments, handleCommData }) => {
    }
 }
 
+const router = useRouter();
 
+const handleRoute = (id) => {
+   router.push(`/Account/${id}`)
+}
 
   return (
     <div className='px-4 bg-white py-4 shadow-md'>
@@ -118,7 +123,7 @@ const Comments = ({ comments, handleCommData }) => {
          </div>
          <div className='mx-6 my-4 py-4 flex-1'>
             <div className='flex items-center justify-between'>
-            <h1 className='text-xl font-bold font-serif '>{item?.commentor?.name}</h1>
+            <h1 className='text-xl font-bold cursor-pointer font-serif ' onClick={() => handleRoute(item?.commentor?._id)}>{item?.commentor?.name}</h1>
             {user?._id === item?.commentor?._id &&
             <AiFillDelete className='text-red-500 text-xl' onClick={() => handleClick(index)}/>
             }

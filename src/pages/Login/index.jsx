@@ -14,10 +14,13 @@ const UserAuth = () => {
   const [isAuth, setIsAuth] = useState(false);
   const dispatch = useDispatch()
 
+  const [loadingLogin, setLoadingLogin] = useState(false);
+
   const SignIn = async ({ email, password }) => {
     // dispatch(loginStart());
 
     try {
+      setLoadingLogin(true)
       // console.log(PRODUCTION_URL);
       const res = await axios.post(`${PRODUCTION_URL  || "http://localhost:5000"}/api/auth/login`, { email, password }, {
         headers: {
@@ -33,6 +36,7 @@ const UserAuth = () => {
         dispatch(loginSuccess({ ...user, "accessToken": token  }));
         toast.success('Login Successfull')
         setIsAuth(!isAuth);
+        setLoadingLogin(false);
       } else {
         dispatch(loginFailure(res.data.message));
         toast.error('Login Failed');
@@ -41,6 +45,8 @@ const UserAuth = () => {
     } catch (error) {
       console.log(error.message);
       toast.error('login failed');
+    } finally {
+      setLoadingLogin(false);
     }
     }
 
@@ -48,6 +54,7 @@ const UserAuth = () => {
     console.log('signup');
     dispatch(registerStart());
     try {
+      setLoadingLogin(true)
       const res = await axios.post(`${PRODUCTION_URL}/api/auth/register`, {
         name, email, password, avatar
       }, {
@@ -69,6 +76,7 @@ const UserAuth = () => {
 
     setTimeout(() => {
       setIsAuth(!isAuth);
+      setLoadingLogin(false);
     }, 3000);
       } else {
         dispatch(registerFailure('Something went wrong'));
@@ -76,10 +84,9 @@ const UserAuth = () => {
 
     } catch(err) {
       console.log(err.message);
+    } finally {
+      setLoadingLogin(false);
     }
-
-    // console.log(name, email, password, avatar);
-
   }
 
   const router = useRouter()
@@ -100,7 +107,7 @@ const UserAuth = () => {
     </Head>
     <div className='w-full max-h-full min-h-screen flex items-center justify-center bg-black '>
       <div className='w-[25em] my-10 mx-2 px-4 bg-gray-900 bg-opacity-80 transition-all z-[99]'>
-        {isLogin ? <Login handleClick={handleClick} handleSubmit={SignIn}/> : <Register handleClick={handleClick} handleSubmit={Signup} />}
+        {isLogin ? <Login handleClick={handleClick} handleSubmit={SignIn} loadingLogin={loadingLogin} /> : <Register handleClick={handleClick} handleSubmit={Signup} />}
       </div>
     </div>
     </>
@@ -111,7 +118,7 @@ export default UserAuth
 
 
 // Register Component
-const Register = ({handleClick, handleSubmit}) => {
+const Register = ({handleClick, handleSubmit, loadingLogin }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -248,16 +255,16 @@ const Register = ({handleClick, handleSubmit}) => {
         {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
         </div>
         <div>
-        <button type='submit' className='w-full bg-blue-500 text-white p-2 my-2'>Register</button>
+        <button type={loadingLogin ? '' : 'submit'} className={`w-full ${loadingLogin ? "bg-green-500 cursor-progress" : "bg-blue-500"} text-white p-2 my-2`}>{loadingLogin ? "Loading..." : "Register"}</button>
         </div>
       </form>
-      <p className='text-white px-2'>Already Have an Account? <span className='text-sky-500 cursor-pointer' onClick={handleClick}>Login</span></p>
+      <p className='text-white px-2'>Already Have an Account? <span className='text-sky-500 cursor-pointer' onClick={!loadingLogin && handleClick}>Login</span></p>
     </div>
   )
 }
 
 // Login Component
-const Login = ({handleClick, handleSubmit}) => {
+const Login = ({handleClick, handleSubmit, loadingLogin}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
@@ -320,11 +327,11 @@ const Login = ({handleClick, handleSubmit}) => {
         {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
         </div>
         <div>
-        <button type="submit" className='w-full bg-blue-500 text-white p-2 my-2 font-bold'>Login</button>
+        <button type={loadingLogin ? '' : "submit"} className={`w-full ${loadingLogin ? "bg-green-500 cursor-not-allowed" : "bg-blue-500" }  text-white p-2 my-2 font-bold`}>{loadingLogin ? "Loading..." : "Login"}</button>
         </div>
       </form>
 
-      <p className='text-white px-2'>Does not have an Account? <span className='text-sky-500 cursor-pointer' onClick={handleClick}>Register</span></p>
+      <p className='text-white px-2'>Does not have an Account? <span className='text-sky-500 cursor-pointer' onClick={!loadingLogin && handleClick}>Register</span></p>
     </div>
   )
 }
