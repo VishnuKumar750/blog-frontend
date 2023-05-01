@@ -13,6 +13,8 @@ const UserAuth = () => {
 
   const [isAuth, setIsAuth] = useState(false);
   const dispatch = useDispatch()
+  const router = useRouter()
+  const redirect  = router.query.redirect || '/';
 
   const [loadingLogin, setLoadingLogin] = useState(false);
 
@@ -37,6 +39,8 @@ const UserAuth = () => {
         toast.success('Login Successfull')
         setIsAuth(!isAuth);
         setLoadingLogin(false);
+
+        router.push(redirect);
       } else {
         dispatch(loginFailure(res.data.message));
         toast.error('Login Failed');
@@ -77,6 +81,7 @@ const UserAuth = () => {
     setTimeout(() => {
       setIsAuth(!isAuth);
       setLoadingLogin(false);
+      router.push(redirect);
     }, 3000);
       } else {
         dispatch(registerFailure('Something went wrong'));
@@ -89,10 +94,9 @@ const UserAuth = () => {
     }
   }
 
-  const router = useRouter()
-  if(isAuth) {
-    router.replace('/');
-    return null;
+
+  const notDoAnything = () => {
+    console.log('not do anything');
   }
 
   const handleClick = () => {
@@ -107,7 +111,7 @@ const UserAuth = () => {
     </Head>
     <div className='w-full max-h-full min-h-screen flex items-center justify-center bg-black '>
       <div className='w-[25em] my-10 mx-2 px-4 bg-gray-900 bg-opacity-80 transition-all z-[99]'>
-        {isLogin ? <Login handleClick={handleClick} handleSubmit={SignIn} loadingLogin={loadingLogin} /> : <Register handleClick={handleClick} handleSubmit={Signup} />}
+        {isLogin ? <Login handleClick={handleClick} handleSubmit={SignIn} loadingLogin={loadingLogin} notDoAnything={notDoAnything} /> : <Register handleClick={handleClick} handleSubmit={Signup} notDoAnything={notDoAnything} />}
       </div>
     </div>
     </>
@@ -118,7 +122,7 @@ export default UserAuth
 
 
 // Register Component
-const Register = ({handleClick, handleSubmit, loadingLogin }) => {
+const Register = ({handleClick, handleSubmit, loadingLogin, notDoAnything }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -258,13 +262,13 @@ const Register = ({handleClick, handleSubmit, loadingLogin }) => {
         <button type={loadingLogin ? '' : 'submit'} className={`w-full ${loadingLogin ? "bg-green-500 cursor-progress" : "bg-blue-500"} text-white p-2 my-2`}>{loadingLogin ? "Loading..." : "Register"}</button>
         </div>
       </form>
-      <p className='text-white px-2'>Already Have an Account? <span className='text-sky-500 cursor-pointer' onClick={!loadingLogin && handleClick}>Login</span></p>
+      <p className='text-white px-2'>Already Have an Account? <span className='text-sky-500 cursor-pointer' onClick={loadingLogin ? notDoAnything : handleClick}>Login</span></p>
     </div>
   )
 }
 
 // Login Component
-const Login = ({handleClick, handleSubmit, loadingLogin}) => {
+const Login = ({handleClick, handleSubmit, loadingLogin, notDoAnything}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
@@ -331,7 +335,7 @@ const Login = ({handleClick, handleSubmit, loadingLogin}) => {
         </div>
       </form>
 
-      <p className='text-white px-2'>Does not have an Account? <span className='text-sky-500 cursor-pointer' onClick={!loadingLogin && handleClick}>Register</span></p>
+      <p className='text-white px-2'>Does not have an Account? <span className='text-sky-500 cursor-pointer' onClick={loadingLogin ? notDoAnything :  handleClick}>Register</span></p>
     </div>
   )
 }

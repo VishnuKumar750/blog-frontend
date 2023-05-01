@@ -57,7 +57,6 @@ const items = [
 ]
 
 const Posts = () => {
-  const router = useRouter()
   const { loading, posts } = useSelector(state => state.post )
   const { totalPages } = useSelector(state => state.post.posts)
   const dispatch = useDispatch()

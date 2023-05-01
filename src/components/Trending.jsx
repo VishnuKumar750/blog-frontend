@@ -94,7 +94,7 @@ const Trending = () => {
             'cache-control': 'no-cache'
           }
         })
-        console.log(res.data);
+        // console.log(res.data);
         dispatch(fetchTrendingSuccess(res.data.data))
       } catch (error) {
         dispatch(fetchTrendingFailure(error.message))

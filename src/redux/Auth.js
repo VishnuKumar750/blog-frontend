@@ -95,7 +95,7 @@ export const getLoggedUser = () => async (dispatch) => {
          })
          // console.log(res.data);
          if(res.data) {
-            console.log('initalize_user');
+            // console.log('initalize_user');
             dispatch(INITIALIZE_USER(res.data.data));
          } else {
          }

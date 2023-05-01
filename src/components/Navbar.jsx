@@ -12,7 +12,7 @@ const Navbar = () => {
 
   const router = useRouter()
   const handleAuth = () => {
-    router.push('/Login')
+    router.push(`/Login?redirect=${encodeURIComponent(router.asPath)}`)
   }
 
   useEffect(() => {
