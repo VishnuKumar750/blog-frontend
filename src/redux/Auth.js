@@ -89,7 +89,7 @@ export const getLoggedUser = () => async (dispatch) => {
       const accessToken = Cookies.get('accessToken') ? Cookies.get('accessToken') : null;
 
       // verify token with backend
-      const res = await axios.post(`${DEVELOPMENT_URL || PRODUCTION_URL}/api/user/isTokenValid`, {
+      const res = await axios.post(`${PRODUCTION_URL}/api/user/isTokenValid`, {
          "token": accessToken
       })
 
