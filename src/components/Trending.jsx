@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Card from './trending/Card'
 import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai'
 import Slider from 'react-slick'

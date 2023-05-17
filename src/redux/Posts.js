@@ -78,8 +78,6 @@ export const fetchTrending = () => async (dispatch) => {
                   }
             });
 
-            console.log(res.data.data);
-
             dispatch(fetchTrendingSuccess(res.data.data))
       } catch (error) {
             dispatch(fetchTrendingFailure())

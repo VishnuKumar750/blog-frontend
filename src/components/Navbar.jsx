@@ -1,4 +1,4 @@
-import { INITIALIZE_USER, getLoggedUser, logoutStart, logoutSuccess } from '@/redux/Auth'
+import {  getLoggedUser, logoutStart, logoutSuccess } from '@/redux/Auth'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'

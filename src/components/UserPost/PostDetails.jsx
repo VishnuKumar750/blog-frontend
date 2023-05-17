@@ -1,14 +1,12 @@
-import axios from 'axios'
-import Cookies from 'js-cookie'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
-import { FaCamera, FaEdit, FaFacebook, FaHeart, FaInstagram, FaPinterest, FaRegHeart, FaTwitter } from 'react-icons/fa'
+import { FaCamera, FaEdit, FaFacebook, FaHeart, FaInstagram, FaPinterest, FaTwitter } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { DEVELOPMENT_URL, PRODUCTION_URL } from '../../../constants'
+import { deletePost, likePost, unlikePost, updatePost } from '@/pages/api/PostsCalls'
 
 const PostDetails = ({ posts, handleUpdateEffect }) => {
   const { user } = useSelector(state => state.auth)
@@ -16,8 +14,6 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
   const [showDelete, setShowDelete] = useState(false);
   const liked = posts?.post?.likes?.findIndex((like) => like?.user?._id === user?._id);
 
-  // console.log(liked);
-  // update post state
   const [postTitle, setTitle] = useState('');
   const [postContent, setContent] = useState('');
   const [preview, setPreview] = useState('');
@@ -42,21 +38,18 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
   
   const handleDelete = async () => {
     try {
-      const res = await axios.delete(`${PRODUCTION_URL}/api/posts/delete/${posts?.post?._id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + Cookies.get('accessToken')
-        }
-      })
-      if(res.data.success) {
+      const deletedPostStatus = await deletePost(posts?.post?._id);
+      if(deletedPostStatus?.success) {
         toast.success('Post Deleted Successfully')
         setTimeout(() => {
           setShowDelete(false)
           router.replace('/');
         }, 2000);
-       }
+        } else {
+          toast.error("some thing went wrong")
+        }
     } catch(err) {
-
+      console.log("something went wrong");
     } finally {
       setTimeout(() => {
         setShowDelete(false);
@@ -79,23 +72,19 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
     if(image) form.image = image;
 
     try {
-      const res = await axios.put(`${PRODUCTION_URL}/api/posts/updatePost/${posts?.post?._id}`, form, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + Cookies.get('accessToken')
-        }})
+      const postUpdateStatus = await updatePost(posts?.post?._id, form);
 
-        if(res.data.success) {
-          toast.success('Post Updated Successfully')
-         
-          handleUpdateEffect();
+      if(postUpdateStatus?.success) {
+        toast.success('Post Updated Successfully')
+      
+        handleUpdateEffect();
 
-          setTimeout(() => {
-            setShowUpdatePost(false)
-          }, 2000);
-        } else {
-          toast.error(res.data.message)
-        }
+        setTimeout(() => {
+          setShowUpdatePost(false)
+        }, 2000);
+      } else {
+        toast.error(res.data.message)
+      }
    } catch(err) {
       console.log(err.message);
       } finally {
@@ -108,44 +97,30 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
 
   const handleLiked = async (e) => {
     e.preventDefault();
-
     if(!user) {
       toast.error('Please Login to like this post');
       return;
     }
     try {
-      const res = await axios.post(`${DEVELOPMENT_URL || PRODUCTION_URL}/api/posts/like/${posts?.post?._id}`, {}, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + Cookies.get('accessToken'),
-          'cache-control': 'no-cache'
-        }
-      })
-      if(res.data.success) {
+      const likedPost = await likePost(posts?.post?._id);
+
+      if(likedPost?.success) {
         handleUpdateEffect();
       }
     } catch(err) {
-
+      console.log('Something went wrong')
     }
   } 
 
   const handleDisliked = async (e) => {
     try {
-      const res = await axios.post(`${PRODUCTION_URL}/api/posts/dislike/${posts?.post?._id}`, {}, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + Cookies.get('accessToken'),
-          'cache-control': 'no-cache'
+      const dislike = await unlikePost(posts?.post?._id);
 
-        }
-      })
-
-      if(res.data.success) {
+      if(dislike?.success) {
         handleUpdateEffect();
       }
-
     } catch(err) {
-
+      console.log('Something went wrong')
     }
   }
 

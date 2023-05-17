@@ -3,11 +3,8 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { categories } from '../../../data'
 import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import axios from 'axios'
-import Cookies from 'js-cookie'
-import { PRODUCTION_URL } from '../../../constants'
+import { createPost } from '../api/PostsCalls'
 
 const Post = () => {
   const [title, setTitle ] = useState('')
@@ -20,7 +17,6 @@ const Post = () => {
   const [disable, setDisable] = useState(false)
 
   const [errors, setErrors ] = useState({})
-  // const [loading, setLoading ] = useState(false)
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
@@ -58,29 +54,16 @@ const Post = () => {
     }
 
     setDisable(true);
-    console.log(tags);
 
     try {
-      const res = await axios.post(`${PRODUCTION_URL}/api/posts/`, {
-        title,
-        content,
-        tags,
-        image
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": "Bearer " + Cookies.get("accessToken"),
-            'cache-control': 'no-cache'
-            } 
-        })
+      const postCreateStatus = await createPost(title, content, tags, image)
 
-      if(res.data) {
+      if(postCreateStatus?.success) {
         toast.success('Post Created Successfully')
         setTimeout(() => {
           router.replace('/');
-        }, 2000);
 
+        }, 2000);
       } else {
         toast.error('Post Creation Failed')
       }

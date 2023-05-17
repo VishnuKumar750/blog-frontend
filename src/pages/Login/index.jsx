@@ -68,7 +68,6 @@ const UserAuth = () => {
         }
       });
 
-      console.log(res.data);
       if(res.data) {
         const { user, token } = res.data;
   

@@ -1,60 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import Card from './posts/Card'
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
-import { useRouter } from 'next/router'
 import LoadingCard from './posts/LoadingCard'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchPosts, fetchPostsFailure, fetchPostsStart, fetchPostsSuccess } from '@/redux/Posts'
-import Cookies from 'js-cookie'
-import axios from 'axios'
+import { fetchPosts } from '@/redux/Posts'
 import Link from 'next/link'
-import { PRODUCTION_URL } from '../../constants'
 
-
-const items = [
-  {
-    id: 1,
-    image: "/post/hero.jpg",
-    title: 'Title 1',
-    description: 'Description 1',
-    tags: ['tag1', 'tag2', 'tag3']
-  },
-  {
-    id: 2,
-    image: '/post/hero.jpg',
-    title: 'Title 2',
-    description: 'Description 2',
-    tags: ['tag4', 'tag5', 'tag6']
-  },
-  {
-    id: 3,
-    image: '/post/hero.jpg',
-    title: 'Title 3',
-    description: 'Description 3',
-    tags: ['tag7', 'tag8', 'tag9']
-  },
-  {
-    id: 4,
-    image: '/post/hero.jpg',
-    title: 'Title 4',
-    description: 'Description 4',
-    tags: ['tag10', 'tag11', 'tag12']
-  },
-  {
-    id: 5,
-    image: '/post/hero.jpg',
-    title: 'Title 5',
-    description: 'Description 5',
-    tags: ['tag13', 'tag14', 'tag15']
-  },
-  {
-    id: 6,
-    image: '/post/hero.jpg',
-    title: 'Title 6',
-    description: 'Description 6',
-    tags: ['tag16', 'tag17', 'tag18']
-  },
-]
 
 const Posts = () => {
   const { loading, posts } = useSelector(state => state.post )

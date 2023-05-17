@@ -7,10 +7,9 @@ import Navbar from "@/components/Navbar";
 import Posts from "@/components/Posts";
 import Trending from "@/components/Trending";
 import Head from "next/head";
-import Cookies from "js-cookie";
 
 
-export default function Home({ token }) {
+export default function Home() {
   
   return (
     <>
