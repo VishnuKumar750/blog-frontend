@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { PRODUCTION_URL } from '../../constants';
+import { DEVELOPMENT_URL, PRODUCTION_URL } from '../../constants';
 
 const initialState = {
    user: {},
@@ -86,6 +86,17 @@ export const getLoggedUser = () => async (dispatch) => {
    try {
       const user = JSON.parse(localStorage.getItem("user")) ? JSON.parse(localStorage.getItem("user")) : null;
 
+      const accessToken = Cookies.get('accessToken') ? Cookies.get('accessToken') : null;
+
+      // verify token with backend
+      const res = await axios.post(`${DEVELOPMENT_URL || PRODUCTION_URL}/api/user/isTokenValid`, {
+         "token": accessToken
+      })
+
+      // console.log(res);
+      if(!res.data.success) {
+         dispatch(logoutSuccess());
+      }
 
       if(user) {
          const res = await axios.get(`${PRODUCTION_URL}/api/user/getUser/${user._id}`, {

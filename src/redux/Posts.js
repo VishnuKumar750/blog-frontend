@@ -70,12 +70,15 @@ const trending = createSlice({
 export const fetchTrending = () => async (dispatch) => {
       dispatch(fetchTrendingStart())
       try {
+            console.log('fetching trending');
             const res = await axios.get(`${PRODUCTION_URL}/api/posts/trending`, {
                   headers: {
                         'Content-Type': 'application/json',
                         'cache-control': 'no-cache',
                   }
             });
+
+            console.log(res.data.data);
 
             dispatch(fetchTrendingSuccess(res.data.data))
       } catch (error) {

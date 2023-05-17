@@ -70,7 +70,7 @@ const AccountProfile = ({ handleClick, user }) => {
   }
 
   return (
-      <div className='w-[28em] h-full  bg-slate-800 px-8 py-4 rounded-md shadow-md' onClick={(e) =>  e.stopPropagation()}>
+      <div className='w-[95%] sm:w-[28em] h-full  bg-slate-800 px-8 py-4 rounded-md shadow-md' onClick={(e) =>  e.stopPropagation()}>
         <h1 className='text-xl font-bold font-serif py-2 text-white'>Edit Profile</h1>
         <form className='py-2 grid gap-4' onSubmit={handleSubmit}>
           <div className='flex items-center'>

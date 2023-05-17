@@ -8,7 +8,7 @@ import { AiFillDelete } from 'react-icons/ai'
 import { FaCamera, FaEdit, FaFacebook, FaHeart, FaInstagram, FaPinterest, FaRegHeart, FaTwitter } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { PRODUCTION_URL } from '../../../constants'
+import { DEVELOPMENT_URL, PRODUCTION_URL } from '../../../constants'
 
 const PostDetails = ({ posts, handleUpdateEffect }) => {
   const { user } = useSelector(state => state.auth)
@@ -114,7 +114,7 @@ const PostDetails = ({ posts, handleUpdateEffect }) => {
       return;
     }
     try {
-      const res = await axios.post(`${PRODUCTION_URL}/api/posts/like/${posts?.post?._id}`, {}, {
+      const res = await axios.post(`${DEVELOPMENT_URL || PRODUCTION_URL}/api/posts/like/${posts?.post?._id}`, {}, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': "Bearer " + Cookies.get('accessToken'),
